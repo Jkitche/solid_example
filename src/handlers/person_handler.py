@@ -18,23 +18,23 @@ class PersonHandler(RequestHandler):
         """
         self.personService = personService
 
-    def get(self, id: int) -> None:
+    async def get(self, id: int) -> None:
         """
         The HTTP GET method for this handler
         """
         try:
-            person = self.personService.get_person_by_id(id)
+            person = await self.personService.get_person_by_id(id)
             self.write(person.dict())
         except UnknownPersonException as e:
             self.set_status(HTTPStatus.BAD_REQUEST)
             self.finish({"error": f"Unable to find person with ID '{id}'"})
 
-    def delete(self, id: int) -> None:
+    async def delete(self, id: int) -> None:
         """
         The HTTP DELETE method for this handler
         """
         try:
-            self.personService.delete_person_by_id(id)
+            await self.personService.delete_person_by_id(id)
         except UnknownPersonException as e:
             self.set_status(HTTPStatus.BAD_REQUEST)
             self.finish({"error": f"Unable to find person with ID '{id}'"})

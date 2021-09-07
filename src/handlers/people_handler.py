@@ -1,7 +1,7 @@
 import json
 
 from src.models.person import Person
-from src.services.person_service import BasePersonRepository
+from src.services.base_person_service import BasePersonService
 from tornado.web import RequestHandler
 
 
@@ -10,7 +10,7 @@ class PeopleHandler(RequestHandler):
     Handlers are responsible for parsing HTTP requests,
     calling into business logic, and adapting the response to and HTTP spec appropriate response
     """
-    def initialize(self, personService: BasePersonRepository) -> None:
+    def initialize(self, personService: BasePersonService) -> None:
         """
         Initialize is a method called by tornado/cyclone to inject dependencies
 

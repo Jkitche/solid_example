@@ -1,10 +1,11 @@
-import os
-import sqlite3
-from src.util.sqlite_person_adapter import SqlitePersonAdapter
-from typing import List, Optional
+from __future__ import annotations
 
-from aiosqlite import Connection, Error, connect
+from src.database.sqlite_connection_factory import SqliteConnectionFactory
+from typing import List
+
+from aiosqlite import Connection
 from src.models.person import Person
+from src.util.sqlite_person_adapter import SqlitePersonAdapter
 
 from .base_person_repository import BasePersonRepository
 
@@ -24,19 +25,11 @@ class SqlitePersonRepository(BasePersonRepository):
         e: Unknown errors
         UnknownPersonException: When a Person cannot be found by ID
     """
-    _connection: Optional[Connection]
-
-    def __init__(self) -> None:
-        self._connection = None
+    def __init__(self, connectionFactory: SqliteConnectionFactory) -> None:
+        self.connectionFactory = connectionFactory
 
     async def get_connection(self) -> Connection:
-        try:
-            file_path = os.path.dirname(os.path.realpath(__file__))
-            self._connection = await connect(f"{file_path}/test.db")
-            self._connection.row_factory = sqlite3.Row
-            return self._connection
-        except Error as e:
-            raise e
+        return await self.connectionFactory.get_connection(use_cached=True)
 
     async def get_all_people(self) -> List[Person]:
         conn = await self.get_connection()

@@ -1,5 +1,5 @@
 from src.repositories.sqlite_person_repository import UnknownPersonException
-from src.services.person_service import BasePersonRepository
+from src.services.person_service import BasePersonService
 from tornado.web import RequestHandler
 from http import HTTPStatus
 
@@ -9,7 +9,7 @@ class PersonHandler(RequestHandler):
     Handlers are responsible for parsing HTTP requests,
     calling into business logic, and adapting the response to and HTTP spec appropriate response
     """
-    def initialize(self, personService: BasePersonRepository) -> None:
+    def initialize(self, personService: BasePersonService) -> None:
         """
         Initialize is a method called by tornado/cyclone to inject dependencies
 
@@ -27,7 +27,6 @@ class PersonHandler(RequestHandler):
             self.write(person.dict())
         except UnknownPersonException as e:
             self.set_status(HTTPStatus.BAD_REQUEST)
-            self.finish({"error": f"Unable to find person with ID '{id}'"})
 
     async def delete(self, id: int) -> None:
         """
@@ -37,4 +36,3 @@ class PersonHandler(RequestHandler):
             await self.personService.delete_person_by_id(id)
         except UnknownPersonException as e:
             self.set_status(HTTPStatus.BAD_REQUEST)
-            self.finish({"error": f"Unable to find person with ID '{id}'"})

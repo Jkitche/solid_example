@@ -15,7 +15,7 @@ class PeopleHandler(RequestHandler):
         Initialize is a method called by tornado/cyclone to inject dependencies
 
         Args:
-            data_service (DataService): The Data business logic service
+            personService (BasePersonService): Person business logic
         """
         self.personService = personService
 

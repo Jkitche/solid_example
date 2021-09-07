@@ -8,6 +8,12 @@ from src.services.base_person_service import BasePersonService
 
 class PersonService(BasePersonService):
     def __init__(self, personRepository: BasePersonRepository):
+        """
+        Business logic for Person based operations
+
+        Args:
+            personRepository (BasePersonRepository): Data Handler for Person objects
+        """
         self.personRepository = personRepository
 
     async def get_all_people(self) -> List[Person]:

@@ -1,8 +1,8 @@
 import os
 import sqlite3
-from aiosqlite import connect, Connection, Error
 from typing import List, Optional
 
+from aiosqlite import Connection, Error, connect
 from src.models.person import Person
 
 from .base_person_repository import BasePersonRepository
@@ -12,7 +12,17 @@ class UnknownPersonException(Exception):
     pass
 
 
-class PersonRepository(BasePersonRepository):
+class SqlitePersonRepository(BasePersonRepository):
+    """
+    Sqlite based implementation for storing and handling Person objects
+
+    Args:
+        BasePersonRepository: Base Person Repository
+
+    Raises:
+        e: Unknown errors
+        UnknownPersonException: When a Person cannot be found by ID
+    """
     _connection: Optional[Connection]
 
     def __init__(self) -> None:

@@ -2,13 +2,13 @@ from src.dependencies import Dependencies
 from tornado.web import StaticFileHandler
 
 from src.handlers import person_handler, people_handler
-from src.repositories.person_repository import PersonRepository
+from src.repositories.sqlite_person_repository import SqlitePersonRepository
 from src.services.person_service import PersonService
 from src.settings import STATIC_PATH
 
 container = Dependencies()
-container.register_resource("person_repository", lambda x: PersonRepository())
-container.register_resource("person_service", lambda x: PersonService(personRepository=container.get_dependency("person_repository")))
+container.register_resource("sqlite_person_repository", lambda x: SqlitePersonRepository())
+container.register_resource("person_service", lambda x: PersonService(personRepository=container.get_dependency("sqlite_person_repository")))
 
 
 routes = [

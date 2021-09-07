@@ -1,4 +1,4 @@
-from src.repositories.person_repository import UnknownPersonException
+from src.repositories.sqlite_person_repository import UnknownPersonException
 from src.services.person_service import BasePersonRepository
 from tornado.web import RequestHandler
 from http import HTTPStatus
@@ -14,7 +14,7 @@ class PersonHandler(RequestHandler):
         Initialize is a method called by tornado/cyclone to inject dependencies
 
         Args:
-            data_service (DataService): The Data business logic service
+            personService (BasePersonService): Person business logic
         """
         self.personService = personService
 

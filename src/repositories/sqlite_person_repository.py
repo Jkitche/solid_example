@@ -1,5 +1,6 @@
 import os
 import sqlite3
+from src.util.sqlite_person_adapter import SqlitePersonAdapter
 from typing import List, Optional
 
 from aiosqlite import Connection, Error, connect
@@ -43,7 +44,7 @@ class SqlitePersonRepository(BasePersonRepository):
         rows = await cursor.fetchall()
         await cursor.close()
         return [
-            Person.from_tuple(tuple(row))
+            SqlitePersonAdapter.person_from_sqlite_row(row)
             for row in rows
         ]
 
@@ -54,7 +55,7 @@ class SqlitePersonRepository(BasePersonRepository):
         await cursor.close()
         if not row or len(tuple(row)) == 0:
             raise UnknownPersonException(f"Unable to find person with ID '{id}'")
-        return Person.from_tuple(tuple(row))
+        return SqlitePersonAdapter.person_from_sqlite_row(row)
 
     async def create_person(self, person: Person) -> None:
         conn = await self.get_connection()

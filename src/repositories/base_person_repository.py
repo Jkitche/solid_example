@@ -1,10 +1,10 @@
-from abc import ABC, abstractmethod
+from abc import ABCMeta, abstractmethod
 from typing import List
 
 from src.models.person import Person
 
 
-class BasePersonRepository(ABC):
+class BasePersonRepository(metaclass=ABCMeta):
     @abstractmethod
     async def get_all_people(self) -> List[Person]:
         raise NotImplementedError("Not Implemented!")

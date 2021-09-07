@@ -1,6 +1,4 @@
-from __future__ import annotations
-
-from typing import Optional, Tuple
+from typing import Optional
 
 from pydantic import BaseModel
 
@@ -11,7 +9,3 @@ class Person(BaseModel):
     age: int
     address: str
 
-    @staticmethod
-    def from_tuple(tuple: Tuple) -> Person:
-        (id, name, age, address) = tuple
-        return Person(id=id, name=name, age=age, address=address)

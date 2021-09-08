@@ -1,9 +1,9 @@
 from __future__ import annotations
 
-from src.database.sqlite_connection_factory import SqliteConnectionFactory
 from typing import List
 
 from aiosqlite import Connection
+from src.database.sqlite_connection_factory import SqliteConnectionFactory
 from src.models.person import Person
 from src.util.sqlite_person_adapter import SqlitePersonAdapter
 
@@ -28,11 +28,11 @@ class SqlitePersonRepository(BasePersonRepository):
     def __init__(self, connectionFactory: SqliteConnectionFactory) -> None:
         self.connectionFactory = connectionFactory
 
-    async def get_connection(self) -> Connection:
+    async def _get_connection(self) -> Connection:
         return await self.connectionFactory.get_connection(use_cached=True)
 
     async def get_all_people(self) -> List[Person]:
-        conn = await self.get_connection()
+        conn = await self._get_connection()
         cursor = await conn.execute("SELECT * FROM person")
         rows = await cursor.fetchall()
         await cursor.close()
@@ -42,7 +42,7 @@ class SqlitePersonRepository(BasePersonRepository):
         ]
 
     async def get_person_by_id(self, id: int) -> Person:
-        conn = await self.get_connection()
+        conn = await self._get_connection()
         cursor = await conn.execute("SELECT * FROM person WHERE id = ?", [id])
         row = await cursor.fetchone()
         await cursor.close()
@@ -51,11 +51,11 @@ class SqlitePersonRepository(BasePersonRepository):
         return SqlitePersonAdapter.person_from_sqlite_row(row)
 
     async def create_person(self, person: Person) -> None:
-        conn = await self.get_connection()
+        conn = await self._get_connection()
         await conn.execute("INSERT INTO person (name, age, address) VALUES (?, ?, ?)", [person.name, person.age, person.address])
         await conn.commit()
 
     async def delete_person_by_id(self, id: int) -> None:
-        conn = await self.get_connection()
+        conn = await self._get_connection()
         await conn.execute("DELETE FROM person WHERE id = ?", [id])
         await conn.commit()

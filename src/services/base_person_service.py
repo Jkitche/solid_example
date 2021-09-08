@@ -12,7 +12,7 @@ class BasePersonService(ABC):
     @abstractmethod
     async def get_person_by_id(self, id: int) -> Person:
         raise NotImplementedError("Not Implemented!")
-    
+
     @abstractmethod
     async def create_person(self, person: Person) -> None:
         raise NotImplementedError("Not Implemented!")

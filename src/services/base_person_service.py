@@ -1,12 +1,13 @@
 from abc import ABC, abstractmethod
-from typing import List
+from typing import Iterable
 
 from src.models.person import Person
 
 
 class BasePersonService(ABC):
     @abstractmethod
-    async def get_all_people(self) -> List[Person]:
+    # I principle
+    async def get_all_people(self) -> Iterable[Person]:
         raise NotImplementedError("Not Implemented!")
 
     @abstractmethod

@@ -8,7 +8,6 @@ from src.services.person_service import PersonService
 from src.settings import STATIC_PATH
 
 date_service = DateService()
-
 sql_connection_factory = SqliteConnectionFactory()
 sqlite_person_repository = SqlitePersonRepository(connectionFactory=sql_connection_factory)
 person_service = PersonService(person_repository=sqlite_person_repository, date_service=date_service)

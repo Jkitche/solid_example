@@ -25,11 +25,11 @@ class SqlitePersonRepository(BasePersonRepository):
         e: Unknown errors
         UnknownPersonException: When a Person cannot be found by ID
     """
-    def __init__(self, connectionFactory: SqliteConnectionFactory) -> None:
-        self.connectionFactory = connectionFactory
+    def __init__(self, connection_factory: SqliteConnectionFactory) -> None:
+        self.connection_factory = connection_factory
 
     async def _get_connection(self) -> Connection:
-        return await self.connectionFactory.get_connection(use_cached=True)
+        return await self.connection_factory.get_connection(use_cached=True)
 
     async def get_all_people(self) -> List[Person]:
         conn = await self._get_connection()
@@ -37,7 +37,7 @@ class SqlitePersonRepository(BasePersonRepository):
         rows = await cursor.fetchall()
         await cursor.close()
         return [
-            SqlitePersonAdapter.person_from_sqlite_row(row)
+            SqlitePersonAdapter.person_from_dict(dict(row))
             for row in rows
         ]
 
@@ -48,7 +48,7 @@ class SqlitePersonRepository(BasePersonRepository):
         await cursor.close()
         if not row or len(tuple(row)) == 0:
             raise UnknownPersonException(f"Unable to find person with ID '{id}'")
-        return SqlitePersonAdapter.person_from_sqlite_row(row)
+        return SqlitePersonAdapter.person_from_dict(dict(row))
 
     async def create_person(self, person: Person) -> None:
         conn = await self._get_connection()

@@ -1,5 +1,7 @@
 # SOLID Programming Example CRUD API
 
+This repository is used as an example to shower newer developers the basics of SOLID Programming principals in Python
+
 ## Getting Started
 
 * Create the virtualenv
